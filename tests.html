@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Slider</title>
+
+    <style>
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+        }
+        body { 
+            display: flex; 
+            flex-direction: column;
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            background: #f0f0f0; 
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            text-align: center;
+            color: #2729ac;
+            margin-bottom: 20px;
+        }
+        .slider-container { 
+            position: relative; 
+            width: 80%;
+            max-width: 600px; 
+            overflow: hidden; 
+            border-radius: 10px; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2); 
+        }
+        .slides { 
+            display: flex; 
+            transition: transform 0.5s ease-in-out; 
+        }
+        .slide { 
+            min-width: 100%; 
+        }
+        img { 
+            width: 100%; 
+            display: block; 
+            border-radius: 10px;
+        }
+        .prev, .next { 
+            position: absolute; 
+            top: 50%; 
+            transform: translateY(-50%); 
+            background: rgba(0,0,0,0.5); 
+            color: white; 
+            border: none; 
+            padding: 10px; 
+            cursor: pointer; 
+            font-size: 18px;
+            transition: 0.3s;
+        }
+        .prev:hover, .next:hover {
+            background: rgba(0,0,0,0.7);
+        }
+        .prev { left: 10px; }
+        .next { right: 10px; }
+    </style>
+</head>
+<body>
+
+    <h1>DYNAMIC IMAGE SLIDER</h1>
+
+    <div class="slider-container">
+        <div class="slides">
+            <div class="slide"><img src="images/img 1.jpg" alt="Slide 1"></div>
+            <div class="slide"><img src="images/img2.jpg" alt="Slide 2"></div>
+            <div class="slide"><img src="images/img3.jpg" alt="Slide 3"></div>
+            <div class="slide"><img src="images/img 4.jpg" alt="Slide 4"></div>
+            <div class="slide"><img src="images/img 5.jpg" alt="Slide 5"></div>
+        </div>
+        <button class="prev">&#10094;</button>
+        <button class="next">&#10095;</button>
+    </div>
+
+    <script>
+        const slides = document.querySelector('.slides');
+        const images = document.querySelectorAll('.slide');
+        const prevButton = document.querySelector('.prev');
+        const nextButton = document.querySelector('.next');
+        let index = 0;
+        let autoSlide;
+
+        function showSlide(idx) {
+            if (idx >= images.length) index = 0;
+            if (idx < 0) index = images.length - 1;
+            slides.style.transform = `translateX(${-index * 100}%)`;
+        }
+
+        function navigateSlide(step) {
+            index += step;
+            showSlide(index);
+            resetAutoSlide();
+        }
+
+        function startAutoSlide() {
+            autoSlide = setInterval(() => { index++; showSlide(index); }, 3000);
+        }
+
+        function resetAutoSlide() {
+            clearInterval(autoSlide);
+            startAutoSlide();
+        }
+
+        prevButton.addEventListener('click', () => navigateSlide(-1));
+        nextButton.addEventListener('click', () => navigateSlide(1));
+
+        document.querySelector('.slider-container').addEventListener('mouseenter', () => clearInterval(autoSlide));
+        document.querySelector('.slider-container').addEventListener('mouseleave', () => startAutoSlide());
+
+        startAutoSlide();
+    </script>
+
+</body>
+</html>
